@@ -16,4 +16,25 @@ class MyQueue:
             self.size = MyQueue.DEFAULT_SIZE
         if default_item is not None:
             self.default_item = default_item
+    
+# mutators-----------------------------------
+    def set_size(self, size):
+        if not valid_size(size):
+            return False
+        # else    
+        self.size = size
+        clear()
         
+    def add(self, default_item):
+        if not valid_item(default_item):
+            return False
+        
+# class/static methods-----------------------
+    @classmethod
+    def validate_size(self, test_size):
+        if not 0 <= test_size <= cls.MAX_SIZE:
+            return False
+        elif type(test_size) != type(self.size):
+            return False
+        else:
+            return True
