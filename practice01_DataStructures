@@ -1,0 +1,19 @@
+import copy
+
+
+class MyQueue:
+    # class constants
+    MAX_SIZE = 1000
+    DEFAULT_SIZE = 10
+    EMPTY_QUEUE_ALERT = "**Queue is empty**"
+    ORIG_DEFUALT_ITEM = ""
+    default_item = ORIG_DEFAULT_ITEM
+    
+    def __init__(self, size=DEFAULT_SIZE, default_item=None)
+        self.que = []
+        self.toq = 0
+        if not self.set_size(size):
+            self.size = MyQueue.DEFAULT_SIZE
+        if default_item is not None:
+            self.default_item = default_item
+        
