@@ -29,6 +29,9 @@ class MyQueue:
         if not valid_item(default_item):
             return False
         
+    def remove(self):
+        pass
+    
 # class/static methods-----------------------
     @classmethod
     def validate_size(self, test_size):
@@ -38,3 +41,7 @@ class MyQueue:
             return False
         else:
             return True
+    
+    @classmethod
+    def set_default_item(cls, new_default):
+        cls.default_item = new_default
