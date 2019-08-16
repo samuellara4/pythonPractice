@@ -1,3 +1,4 @@
+# Queue Data Structures
 import copy
 
 
@@ -5,43 +6,73 @@ class MyQueue:
     # class constants
     MAX_SIZE = 1000
     DEFAULT_SIZE = 10
-    EMPTY_QUEUE_ALERT = "**Queue is empty**"
-    ORIG_DEFUALT_ITEM = ""
+    EMPTY_QUEUE_ALERT = "Queue is empty"
+    ORIG_DEFAULT_ITEM = ""
     default_item = ORIG_DEFAULT_ITEM
-    
-    def __init__(self, size=DEFAULT_SIZE, default_item=None)
-        self.que = []
+
+    def __init__(self, capacity=DEFAULT_SIZE, default_item=None):
         self.toq = 0
-        if not self.set_size(size):
-            self.size = MyQueue.DEFAULT_SIZE
+        self.que = []
+        if not self.set_capacity(capacity):
+            self.capacity = MyQueue.DEFAULT_SIZE
         if default_item is not None:
             self.default_item = default_item
-    
-# mutators-----------------------------------
-    def set_size(self, size):
-        if not valid_size(size):
+        self.clear()
+
+    def set_capacity(self, capacity):
+        if not self.valid_capacity(capacity):
             return False
-        # else    
-        self.size = size
-        clear()
-        
-    def add(self, default_item):
-        if not valid_item(default_item):
+        self.capacity = capacity
+        self.clear()
+        return True
+
+    def add(self, item_to_add):
+        if self.toq == self.capacity:
             return False
-        
+        if type(item_to_add) != type(self.default_item):
+            return False
+        self.que[self.toq] = item_to_add
+        self.toq += 1
+        return True
+
     def remove(self):
-        pass
-    
-# class/static methods-----------------------
+        if self.toq == 0:
+            return MyQueue.EMPTY_QUEUE_ALERT
+        for i in range(self.capacity):
+            self.capacity -= 1
+            self.que.reverse()
+        return self.que.pop()
+
+    def clear(self):
+        self.que = [copy.deepcopy(self.default_item) for k in range(self.capacity)]
+        self.toq = 0
+
+    def get_capacity(self):
+        return self.capacity
+
     @classmethod
-    def validate_size(self, test_size):
-        if not 0 <= test_size <= cls.MAX_SIZE:
-            return False
-        elif type(test_size) != type(self.size):
+    def valid_capacity(cls, test_capacity):
+        if not (0 <= test_capacity <= cls.MAX_SIZE):
             return False
         else:
             return True
-    
+
     @classmethod
     def set_default_item(cls, new_default):
         cls.default_item = new_default
+
+# Client------------------------------------------------
+
+
+que1 = MyQueue(5, "undef")
+que1.add("first - 1")
+que1.add("second - 2")
+que1.add("third - 3")
+que1.add("fourth - 4")
+que1.add("last - 5")
+print("FIFO is a Queue")
+print(f"The Queue is {que1.que}")
+
+
+for k in range(que1.capacity):
+    print(f"Remove {k + 1}:", str(que1.remove()))
