@@ -9,6 +9,7 @@ class MyQueue:
     EMPTY_QUEUE_ALERT = "Queue is empty"
     ORIG_DEFAULT_ITEM = ""
     default_item = ORIG_DEFAULT_ITEM
+    BEGIN_QUEUE = -1
 
     def __init__(self, capacity=DEFAULT_SIZE, default_item=None):
         self.toq = 0
@@ -39,9 +40,14 @@ class MyQueue:
         if self.toq == 0:
             return MyQueue.EMPTY_QUEUE_ALERT
         for i in range(self.capacity):
-            self.capacity -= 1
-            self.que.reverse()
-        return self.que.pop()
+            self.toq -= 1
+            self.first_of_q = self.start_of_queue()
+            return self.que[self.first_of_q]
+
+    def start_of_queue(self):
+        # this method sets the index to be removed starting with the first item added (FIFO)
+        self.BEGIN_QUEUE += 1
+        return self.BEGIN_QUEUE
 
     def clear(self):
         self.que = [copy.deepcopy(self.default_item) for k in range(self.capacity)]
@@ -64,15 +70,27 @@ class MyQueue:
 # Client------------------------------------------------
 
 
-que1 = MyQueue(5, "undef")
+que1 = MyQueue(10, "undef")
 que1.add("first - 1")
 que1.add("second - 2")
 que1.add("third - 3")
 que1.add("fourth - 4")
 que1.add("last - 5")
+
 print("FIFO is a Queue")
 print(f"The Queue is {que1.que}")
 
-
 for k in range(que1.capacity):
     print(f"Remove {k + 1}:", str(que1.remove()))
+
+que2 = MyQueue(6, 0)
+que2.add(1)
+que2.add(2)
+que2.add(3)
+que2.add(4)
+que2.add(5)
+que2.add(6)
+
+print(f"The Queue 2 is {que2.que}")
+for i in range(que2.capacity):
+    print(f"Remove {i + 1}:", str(que2.remove()))
