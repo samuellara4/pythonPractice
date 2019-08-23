@@ -1,0 +1,146 @@
+# Assignment to practice Enum and Error Handling in Employee class
+from enum import Enum
+
+
+class Employee:
+
+    # employee ID range 100 - 999; if < 500 no benefits
+    MIN_ID = 100
+    BENEFIT_MIN = 500
+    MAX_ID = 999
+    ERROR = "No Input"
+
+    class Shift(Enum):
+        DAY = 1
+        SWING = 2
+        NIGHT = 3
+
+        def __str__(self):
+            return self.name[0].upper() + self.name[1:].lower()
+
+    def __init__(self, emp_name="Unidentified", emp_id=999, emp_shift=1):
+        try:
+            if not self.set_emp_name(emp_name):
+                self.emp_name = emp_name
+            if not self.set_emp_id(emp_id):
+                self.emp_id = emp_id
+            if not self.set_emp_shift(emp_shift):
+                self.emp_shift = emp_shift
+        except AttributeError as e:
+            print(f"Attribute error in __init__ {e}")
+            self.emp_id = Employee.ERROR
+            self.emp_shift = Employee.ERROR
+
+    # Setters to set new attributes
+    def set_emp_name(self, emp_name):
+        self.emp_name = emp_name
+
+    def set_emp_id(self, emp_id):
+        try:
+            if not self.validate_emp_id(emp_id):
+                self.emp_id = emp_id
+                return False
+        except TypeError:
+            print(f"{self.emp_id} is not a number")
+            return True
+
+    def set_emp_shift(self, the_shift):
+        while True:
+            validated = self.validate_emp_shift(the_shift)
+            try:
+                if validated == Employee.Shift.DAY:
+                    self.emp_shift = Employee.Shift.DAY
+
+                if validated == Employee.Shift.SWING:
+                    self.emp_shift = Employee.Shift.SWING
+
+                if validated == Employee.Shift.NIGHT:
+                    self.emp_shift = Employee.Shift.NIGHT
+                # else:
+                #     return False
+
+            except ValueError:
+                print("Invalid shift.")
+                continue
+            except TypeError:
+                print(f"Employee shift not Valid")
+            return self.emp_shift
+
+    def determine_benefits(self):
+        while True:
+            try:
+                if 100 <= self.emp_id <= 999:
+                    if Employee.BENEFIT_MIN <= int(self.emp_id) <= Employee.MAX_ID:
+                        return "YES"
+
+                    if Employee.MIN_ID <= self.emp_id <= Employee.BENEFIT_MIN:
+                        return "NO"
+                    else:
+                        print("Invalid employee ID")
+                        return False
+            except TypeError:
+                print(f"{self.emp_name} Invalid employee ID: {self.emp_id}")
+                break
+
+    # getters to retrieve information
+    def get_emp_name(self):
+        return self.emp_name
+
+    def get_emp_id(self):
+        return self.emp_id
+
+    def get_emp_shift(self):
+        return self.emp_shift
+
+    def validate_emp_id(self, the_id):
+        while True:
+            try:
+                if (int(the_id) >= self.MIN_ID) and (int(the_id) <= self.MAX_ID):
+                    return True
+                else:
+                    print(f"Invalid ID for {self.emp_name}. Needs to be {self.MIN_ID}-{self.MAX_ID}")
+                    return False
+            except ValueError as e:
+                print(f"Invalid input: {e}")
+                break
+
+    @staticmethod
+    def validate_emp_shift(the_shift):
+        valid_shift = the_shift
+        while True:
+            # valid_shift = the_shift
+            try:
+                if valid_shift == 1 or valid_shift == "Day":
+                    valid_shift = Employee.Shift.DAY
+
+                if valid_shift == 2 or valid_shift == "Swing":
+                    valid_shift = Employee.Shift.SWING
+
+                if valid_shift == 3 or valid_shift == "Night":
+                    valid_shift = Employee.Shift.NIGHT
+
+            except ValueError:
+                print("Illegal values")
+
+            return valid_shift
+
+    def __str__(self):
+        try:
+            return "Employee name: {} \nID#: {} (Benefits: {})\n".format(self.emp_name, self.emp_id,
+                                                                         self.determine_benefits()) +\
+                                                                  "Shift: {}".format(self.emp_shift)
+        except AttributeError as e:
+            print(f"Attribute Error in __str__ for: {e}")
+
+# Client Test --------------------------------------------------
+def main():
+
+    emp1 = Employee()
+    emp2 = Employee("Ben Smith", 500, 3)
+    emp3 = Employee("Jen Smith", 199, "Day")
+    print(emp1)
+    print(emp2)
+    print(emp3)
+
+
+main()
